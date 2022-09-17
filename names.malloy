@@ -1,6 +1,7 @@
-source: names is table('duckdb:usa_names.parquet') {
+//  Github: https://github.com/lloydtabb/name_fiddle
+//  About Fiddles: https://github.com/lloydtabb/malloy_fiddle_dist/README.md
 
- 
+source: names is table('duckdb:usa_names.parquet') {
   measure: population is `number`.sum()
   dimension: decade is floor(`year`/10)*10
   query: by_name is {
