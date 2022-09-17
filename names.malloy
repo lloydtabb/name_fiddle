@@ -1,0 +1,24 @@
+source: names is table('duckdb:usa_names.parquet') {
+
+ 
+  measure: population is `number`.sum()
+  dimension: decade is floor(`year`/10)*10
+  query: by_name is {
+    group_by: name
+    aggregate: population
+    limit: 10
+  }
+  query: by_state is {
+    group_by: state
+    aggregate: population
+  }
+  query: by_gender is {
+    group_by: gender
+    aggregate: population
+  }
+  query: by_decade is {
+    group_by: decade
+    aggregate: population
+    order_by: 1 asc
+  }
+}
