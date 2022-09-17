@@ -1,5 +1,5 @@
 //  Github: https://github.com/lloydtabb/name_fiddle
-//  About Fiddles: https://github.com/lloydtabb/malloy_fiddle_dist/README.md
+//  About Fiddles: https://github.com/lloydtabb/malloy_fiddle_dist
 
 source: names is table('duckdb:usa_names.parquet') {
   measure: population is `number`.sum()
