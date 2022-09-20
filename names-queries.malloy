@@ -41,6 +41,30 @@ query: names-> by_state + {
   limit: 50
 }
 
+// --
+// Name: Most Iconic names in NY.
+query: names-> {
+  group_by: name
+  aggregate: 
+    percent_ny is population {? state='NY'} / population
+  having: population > 3000
+}
+
+// --
+// Name: Most Iconic names per State.
+query: names-> {
+  group_by: state
+  aggregate: population
+  nest: names_list_detail is {
+    group_by: name
+    aggregate: 
+      percent_in_state is population / exclude(population, state)
+    limit: 40
+    having: population > 1000
+  }
+  limit: 50
+}
+
 // // --
 // // Name: 100 Most Popular Names
 //   query: name_dashboard is by_name {
