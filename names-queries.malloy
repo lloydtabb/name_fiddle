@@ -59,22 +59,90 @@ query: names-> {
     group_by: name
     aggregate: 
       percent_in_state is population / exclude(population, state)
-    limit: 40
+    limit: 20
     having: population > 1000
   }
   limit: 50
 }
 
-// // --
-// // Name: 100 Most Popular Names
-//   query: name_dashboard is by_name {
-//     nest:
-//       by_decade
-//       by_state
-//     limit: 10
-//   }
-// }
+// --
+// Name: Most Iconic names per Decade.
+query: names-> {
+  group_by: decade
+  aggregate: population
+  nest: names_list_detail is {
+    where: gender = 'M'
+    group_by: name
+    aggregate: 
+      percent_in_decade is population / exclude(population, decade)
+    limit: 20
+    having: population > 5000
+  }
+  nest: female_list_detail is {
+    where: gender = 'F'
+    group_by: name
+    aggregate: 
+      percent_in_decade is population / exclude(population, decade)
+    limit: 20
+    having: population > 5000
+  }
+  order_by: 1 
+  limit: 50
+}
 
-// // named querys
-// //  see: https://looker-open-source.github.io/malloy/documentation/language/query.html
-// query: j_names is names -> name_dashboard {? name ~ r'J'}
+// --
+// Name: Resurgent Names top 2 decades (step 1)
+query: names -> {
+  group_by: name
+  aggregate: population
+  nest: by_decade is {
+    group_by: decade
+    aggregate: percent_in_decade is population/all(population)
+    order_by: 2 desc
+    limit: 2
+  }
+}
+
+// --
+// Name: Resurgent Names top 2 decades (step 2)
+query: names -> {
+  group_by: name
+  aggregate: population
+  nest: by_decade is {
+    group_by: decade
+    aggregate: percent_in_decade is population/all(population)
+    order_by: 2 desc
+    limit: 2
+  }
+}
+-> {
+  where: population > 3000
+  group_by: 
+    name
+    population
+    years_apart is max(by_decade.decade)-min(by_decade.decade)
+    total_percentage is by_decade.percent_in_decade.sum()
+    max_percentage is max(by_decade.percent_in_decade)
+    nest: by_decade is {
+      project: by_decade.*
+    }
+  limit: 300
+}
+
+// --
+// Name: Error, this shold return no results 
+query: names-> {
+  group_by: state
+  aggregate: population
+  nest: names is {
+    group_by: name
+    aggregate: 
+      percent_in_state is population / exclude(population, state)
+    limit: 40
+    having: population > 1000
+  } 
+}
+-> {
+    project: names.name, names.percent_in_state
+    where: names.percent_in_state > 1
+}
