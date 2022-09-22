@@ -135,6 +135,7 @@ query: names -> {
   limit: 300
 }
 
+// --
 // Name: 'Mich' Dashboard
 query: names-> {
   where: name ~ 'Mich%'
