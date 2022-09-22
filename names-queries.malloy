@@ -132,7 +132,7 @@ query: names -> {
     nest: by_decade is {
       project: by_decade.*
     }
-  limit: 300
+  limit: 50
 }
 
 // --
