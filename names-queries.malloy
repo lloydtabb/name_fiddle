@@ -92,6 +92,8 @@ query: names-> {
 
 // --
 // Name: Resurgent Names top 2 decades (step 1)
+// Find names and the top two decades by population
+//
 query: names -> {
   group_by: name
   aggregate: population
@@ -105,6 +107,10 @@ query: names -> {
 
 // --
 // Name: Resurgent Names top 2 decades (step 2)
+// The first stage to the query finds the top two decades
+//  (see the previous example)
+// The second stage computes the difference between years
+//  and the total percentage in both decades (good for filtering)
 query: names -> {
   group_by: name
   aggregate: population
@@ -116,7 +122,7 @@ query: names -> {
   }
 }
 -> {
-  where: population > 3000
+  where: population > 3000 
   group_by: 
     name
     population
@@ -127,6 +133,25 @@ query: names -> {
       project: by_decade.*
     }
   limit: 300
+}
+
+// Name: 'Mich' Dashboard
+query: names-> {
+  where: name ~ 'Mich%'
+  nest: _dashboard is {
+    group_by: name 
+    aggregate: population
+    nest: most_popular_decade is {
+      group_by: decade
+      aggregate: population
+      limit: 1
+    }
+    nest: state_shape_map is {
+      group_by: state
+      aggregate: population
+    }
+    nest: by_decade_line_chart is by_decade
+  }
 }
 
 // --
