@@ -2,9 +2,7 @@
 This data comes form the Social Security Administration Names data.  The
 data contains the number of births for each state, year and gender.
 
-This data model is written in [Malloy](https://github.com/looker-open-source/malloy/).
-
-[Source code for the model on Github](https://github.com/lloydtabb/name_fiddle/blob/main/names_composer.malloy)
+This data model is written in [Malloy](https://github.com/looker-open-source/malloy/), see the [Malloy source code](names_composer.malloy), source for [this document](composer.md), the [configuration](composer.json), or the [repository](https://github.com/lloydtabb/name_fiddle/) on Github.
 
 
 ## Names by Generation
