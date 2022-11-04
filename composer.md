@@ -26,7 +26,7 @@ See each generations most popular names and which states they are most popular i
 
 For each state, what are the most Iconic names (unusally popular)
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="iconic_names_by_state"--> `Iconic Names by State`
+#### <!--malloy-query model="names_composer.malloy" source="names2" query="iconic_names_by_state"--> `Iconic Names by State` - Sometimes you name can predict where you are from.  In this query we find reasonably popular names (where there are more than 3000 with that name) that are most specific to each state.  The popularity ratio show how many more time likely you are to be from that state.
  
 ## Names and Gender
 Some names are gender neutral or gender specific by time or region.  
