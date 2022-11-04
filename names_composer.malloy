@@ -1,0 +1,116 @@
+//  Github: https://github.com/lloydtabb/name_fiddle
+//  About Fiddles: https://github.com/lloydtabb/malloy_fiddle_dist
+
+source: names2 is table('duckdb:usa_names.parquet') {
+  rename: year_born is `year`
+  measure: population is `number`.sum()
+  dimension: decade is floor(year_born/10)*10
+  measure: births_per_100k is floor(population/all(population)*100000)
+
+
+  query: by_name is {
+    group_by: name
+    aggregate: population
+    limit: 10
+  }
+  query: by_state is {
+    group_by: state
+    aggregate: births_per_100k
+  }
+  query: by_gender is {
+    group_by: gender
+    aggregate: population
+  }
+  query: by_decade is {
+    group_by: decade
+    aggregate: births_per_100k
+    order_by: 1 asc
+  }
+
+  query: names_chart is {
+    group_by: name
+    aggregate: births_per_100k
+    nest: by_yeaer_line_chart is {
+      group_by: year_born
+      aggregate: population
+    }
+    nest: by_state_shape_map is {
+      group_by: state
+      aggregate: per_100k is population/exclude(population,name)*100000
+    }
+    limit: 30
+  }
+
+
+  query: current_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 2010
+  }
+
+  query: current_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 2010
+  }
+
+  query: gen_z_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1995 & <= 2010
+  }
+
+  query: gen_z_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 1995 & <= 2010
+  }
+
+  query: millenial_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1980 & <= 1996
+  }
+
+  query: millenial_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 1980 & <= 1996
+  }
+
+  query: iconic_names_by_state is {
+    group_by: name, state, gender
+    aggregate: 
+      all_name is all(population, name)
+      name_popularity is all(population, name) / all(population)
+      state_popularity is population / all(population, state)
+      // popularity is (population / all(population, state))/ ( population / all(population, state))
+  } 
+  -> {
+    where: all_name > 3000 
+    group_by: state
+    nest: by_gender is {
+      group_by: gender
+      nest: name_list_detail is {
+        group_by: 
+          name, 
+          popularity is state_popularity / name_popularity   
+        limit: 20
+        order_by: 2 desc
+      }
+    }
+    order_by: 1
+    limit: 50
+  }
+
+  query: gender_neutral_names is {
+    group_by: name
+    aggregate: population
+    nest: gender_year_line_chart is {
+      group_by: year_born
+      aggregate: population
+      group_by: gender is gender ? pick 'Female' when 'F' else 'Male'
+    }
+    nest: by_state_shape_map is {
+      group_by: state
+      aggregate: percent_female is population{? gender='M'}/population
+    }
+    having: population{? gender='F'}/population ? > .10 & < .9
+    limit: 50
+  }
+
+}
