@@ -155,20 +155,3 @@ query: names-> {
   }
 }
 
-// --
-// Name: Error, this shold return no results 
-query: names-> {
-  group_by: state
-  aggregate: population
-  nest: names is {
-    group_by: name
-    aggregate: 
-      percent_in_state is population / exclude(population, state)
-    limit: 40
-    having: population > 1000
-  } 
-}
--> {
-    project: names.name, names.percent_in_state
-    where: names.percent_in_state > 1
-}
