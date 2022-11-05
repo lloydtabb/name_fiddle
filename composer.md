@@ -5,6 +5,12 @@ data contains the number of births for each state, year and gender.
 This data model is written in [Malloy](https://github.com/looker-open-source/malloy/), see the [Malloy source code](names_composer.malloy), source for [this document](composer.md), the [configuration](composer.json), or the [repository](https://github.com/lloydtabb/name_fiddle/) on Github.
 
 
+## Explore Names
+
+Use thr dashboard below to compare a bunch of names. Change the filter to select different names.
+
+#### <!--malloy-query model="names_composer.malloy" source="names2" query="name_dashboard"--> `Names Dashboard` 
+
 ## Names by Generation
 
 See each generations most popular names and which states they are most popular in.
@@ -20,7 +26,6 @@ See each generations most popular names and which states they are most popular i
 #### <!--malloy-query model="names_composer.malloy" source="names2" query="millenial_f"--> `Millenial Female Names` - Most popular female names between 1980 and 1996
 
 #### <!--malloy-query model="names_composer.malloy" source="names2" query="millenial_m"--> `Millenial Male Names` - Most popular male names between 1980 and 1996
-
 
 ## Iconic Names
 

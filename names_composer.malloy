@@ -1,13 +1,11 @@
 //  Github: https://github.com/lloydtabb/name_fiddle
 //  About Fiddles: https://github.com/lloydtabb/malloy_fiddle_dist
 
-source: names2 is table('duckdb:usa_names.parquet') {
+source: names is table('duckdb:usa_names.parquet') {
   rename: year_born is `year`
   measure: population is `number`.sum()
   dimension: decade is floor(year_born/10)*10
   measure: births_per_100k is floor(population/all(population)*100000)
-
-
   query: by_name is {
     group_by: name
     aggregate: population
@@ -26,7 +24,21 @@ source: names2 is table('duckdb:usa_names.parquet') {
     aggregate: births_per_100k
     order_by: 1 asc
   }
+}
 
+// how big are the populations...
+source: cohort is from(names->{
+  group_by: gender, state, year_born
+  aggregate: cohort_size is population 
+}) + {
+  measure: population is cohort_size.sum()
+}
+
+source: names2 is names +  {
+  join_one: cohort on 
+    gender = cohort.gender 
+    and state = cohort.state 
+    and year_born = cohort.year_born
   query: names_chart is {
     group_by: name
     aggregate: births_per_100k
@@ -39,37 +51,6 @@ source: names2 is table('duckdb:usa_names.parquet') {
       aggregate: per_100k is population/exclude(population,name)*100000
     }
     limit: 30
-  }
-
-
-  query: current_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 2010
-  }
-
-  query: current_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 2010
-  }
-
-  query: gen_z_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 1995 & <= 2010
-  }
-
-  query: gen_z_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 1995 & <= 2010
-  }
-
-  query: millenial_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 1980 & <= 1996
-  }
-
-  query: millenial_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 1980 & <= 1996
   }
 
   query: iconic_names_by_state is {
@@ -161,5 +142,70 @@ source: names2 is table('duckdb:usa_names.parquet') {
         project: by_decade.decade, by_decade.percent_in_decade
       }
     limit: 50
+  }
+
+  query: name_dashboard is {
+    where: name = 'Lloyd' | 'Anika' | 'Jessie' | 'Kelly' | 'Todd' | 'Chris'
+    nest: by_name_line_chart is {
+      group_by: decade
+      aggregate: births_per_100k
+      group_by: name
+    }
+    nest: by_name_bar_chart is {
+      group_by: name
+      aggregate: births_per_100k
+      group_by: gender
+    }
+    nest: name_dashboard is {
+      group_by: name
+      aggregate: population
+      nest: by_year_line_chart is {
+        group_by: year_born
+        aggregate: population
+      }
+      nest: by_state_shape_map is {
+        group_by: state
+        aggregate: per_100k is population/cohort.population * 100000
+      }
+      peak_decade_state is {
+        group_by: state, decade
+        aggregate: per_100k is population/cohort.population * 100000
+        limit: 5
+      }
+    }
+  }
+
+  query: search_index is {
+    index: name, state by population
+  }
+  // these should move into the markdown file
+  query: current_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 2010
+  }
+
+  query: current_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 2010
+  }
+
+  query: gen_z_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1995 & <= 2010
+  }
+
+  query: gen_z_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 1995 & <= 2010
+  }
+
+  query: millenial_f is names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1980 & <= 1996
+  }
+
+  query: millenial_m is names_chart + {
+    where: gender = 'M'
+    where: year_born ? >= 1980 & <= 1996
   }
 }
