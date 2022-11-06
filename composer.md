@@ -13,7 +13,7 @@ Use thr dashboard below to compare a bunch of names. Change the filter to select
 
 ## Names by Generation
 
-See each generations most popular names and which states they are most popular in.
+See each generation's most popular names and which states they are most popular in.  Scaning these results I noticed that in many of these names, Colorado is over represented.  Do you have any theories as to why these names are more popular in Colorado?
 
 #### <!--malloy-query model="names_composer.malloy" source="names2" query="current_f"--> `Current Female Names` - Most popular female names on or after 2010
 
