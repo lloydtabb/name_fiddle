@@ -2,12 +2,16 @@
 This data comes form the Social Security Administration Names data.  The
 data contains the number of births for each state, year and gender.
 
-This data model is written in [Malloy](https://github.com/looker-open-source/malloy/), see the [Malloy source code](names_composer.malloy), source for [this document](composer.md), the [configuration](composer.json), or the [repository](https://github.com/lloydtabb/name_fiddle/) on Github.
+## What is this?
+
+[Malloy Composer](https://github.com/malloydata/malloy-composer) is an open source tool for viewing and exploring data sets.  Data models are created in the  [Malloy](https://github.com/looker-open-source/malloy/) language.  Data can be served from a simple webserver or from a SQL database.
+
+See the [Malloy source code](https://github.com/lloydtabb/name_fiddle/blob/main/names_composer.malloy) for this data set, source for [this document](https://github.com/lloydtabb/imdb_fiddle/blob/main/composer.md), the [configuration](https://github.com/lloydtabb/imdb_fiddle/blob/main/composer.json).
 
 
 ## Explore Names
 
-Use thr dashboard below to compare a bunch of names. Change the filter to select different names.
+Use the dashboard below to compare a bunch of names. Change the filter to select different names.
 
 #### <!--malloy-query model="names_composer.malloy" source="names2" query="name_dashboard"--> `Names Dashboard` 
 
@@ -43,7 +47,7 @@ Some names are gender neutral or gender specific by time or region.
 ## Resurgent Names
 #### <!--malloy-query model="names_composer.malloy" source="names2" query="resurgent_names"--> `Resurgent Names` - Names, once popular, lose popularity and then, sometime later, re-gain popularity.  This query finds those names.  We find the two most popular decades for a given name and the time difference between them.
 
-## About Composer
+## About Malloy Composer
 
 Composer is implemented using Malloy, DuckDB and WASM and runs completely
 in your browser.  Javascript code is compled from here:
