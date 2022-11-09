@@ -179,33 +179,4 @@ source: names2 is names +  {
     index: name, state by population
   }
   // these should move into the markdown file
-  query: current_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 2010
-  }
-
-  query: current_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 2010
-  }
-
-  query: gen_z_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 1995 & <= 2010
-  }
-
-  query: gen_z_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 1995 & <= 2010
-  }
-
-  query: millenial_f is names_chart + {
-    where: gender = 'F'
-    where: year_born ? >= 1980 & <= 1996
-  }
-
-  query: millenial_m is names_chart + {
-    where: gender = 'M'
-    where: year_born ? >= 1980 & <= 1996
-  }
 }

@@ -4,7 +4,7 @@ data contains the number of births for each state, year and gender.
 
 ## What is this?
 
-[Malloy Composer](https://github.com/malloydata/malloy-composer) is an open source tool for viewing and exploring data sets.  Data models are created in the  [Malloy](https://github.com/looker-open-source/malloy/) language.  Data can be served from a simple webserver or from a SQL database.
+[Malloy Composer](https://github.com/malloydata/malloy-composer) is an open source tool for viewing and exploring data sets.  Data models are created in the  [Malloy](https://github.com/looker-open-source/malloy/) language.  Data can be served from a simple webserver or from a SQL database.  
 
 See the [Malloy source code](https://github.com/lloydtabb/name_fiddle/blob/main/names_composer.malloy) for this data set, source for [this document](https://github.com/lloydtabb/imdb_fiddle/blob/main/composer.md), the [configuration](https://github.com/lloydtabb/imdb_fiddle/blob/main/composer.json).
 
@@ -13,39 +13,129 @@ See the [Malloy source code](https://github.com/lloydtabb/name_fiddle/blob/main/
 
 Use the dashboard below to compare a bunch of names. Change the filter to select different names.
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="name_dashboard"--> `Names Dashboard` 
+<!-- malloy-query  
+  name="Name Dashboard - Compare Names"
+  model="Names"
+  renderer="dashboard"
+-->
+```malloy
+query: names2 -> name_dashboard
+```
 
 ## Names by Generation
 
 See each generation's most popular names and which states they are most popular in.  Scaning these results I noticed that in many of these names, Colorado is over represented.  Do you have any theories as to why these names are more popular in Colorado?
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="current_f"--> `Current Female Names` - Most popular female names on or after 2010
+<!-- malloy-query  
+  name="Current: Most popular female names on or after 2010"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 2010
+  }
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="current_m"--> `Current Male Names` - Most popular male names on or after 2010
+<!-- malloy-query  
+  name="Current: Most popular male names on or after 2010"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 2010
+  }
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="gen_z_f"--> `Gen Z Female Names` - Most popular female names between 1995 and 2010
+<!-- malloy-query  
+  name="Gen-Z: Most popular female names between 1995 and 2010"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1995 & <= 2010
+  }
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="gen_z_m"--> `Gen Z Male Names` - Most popular male names between 1995 and 2010
+<!-- malloy-query  
+  name="Gen-Z: Most popular male names  between 1995 and 2010"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1995 & <= 2010
+  }
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="millenial_f"--> `Millenial Female Names` - Most popular female names between 1980 and 1996
+<!-- malloy-query  
+  name="Millenial: Most popular female names between 1980 and 1995"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+    where: year_born ? >= 1980 & <= 1996
+  }
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="millenial_m"--> `Millenial Male Names` - Most popular male names between 1980 and 1996
+<!-- malloy-query  
+  name="Millenial: Most popular male names  between 1980 and 1995"
+  model="Names"
+-->
+```malloy
+  query: names2 -> names_chart + {
+    where: gender = 'F'
+       where: year_born ? >= 1980 & <= 1996
+  }
+```
 
 ## Iconic Names
 
-For each state, what are the most Iconic names (unusally popular)
-
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="iconic_names_by_state"--> `Iconic Names by State` - Sometimes you name can predict where you are from.  In this query we find reasonably popular names (where there are more than 3000 with that name) that are most specific to each state.  The popularity ratio show how many more time likely you are to be from that state.
+For each state, which names are the most Iconic (unusally popular)?
  
+ <!-- malloy-query  
+  name="Iconic Names by State"
+  model="Names"
+-->
+```malloy
+query: names2 -> iconic_names_by_state
+```
+
+
 ## Names and Gender
 Some names are gender neutral or gender specific by time or region.  
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="gender_neutral_names"--> `Gender Neutral Name` - Some names can be are common for both female and male genders.  This query investigates gender neutral names and their use over time and location.
+ <!-- malloy-query  
+  name="Gender Neutral Name"
+  description="Some names can be are common for both female and male genders.  This query investigates gender neutral names and their use over time and location."
+  model="Names"
+-->
+```malloy
+query: names2 -> gender_neutral_names
+```
 
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="kelly_time_space_dashboard"--> `Kelly in Space and Time` - Examine the name 'Kelly' over time and location (in fine detail).  
+ <!-- malloy-query  
+  name="Kelly in Space and Time`"
+  description="Examine the name 'Kelly' over time and location (in fine detail)."
+  model="Names"
+  renderer="dashboard"
+-->
+```malloy
+query: names2 -> kelly_time_space_dashboard
+```
 
-## Resurgent Names
-#### <!--malloy-query model="names_composer.malloy" source="names2" query="resurgent_names"--> `Resurgent Names` - Names, once popular, lose popularity and then, sometime later, re-gain popularity.  This query finds those names.  We find the two most popular decades for a given name and the time difference between them.
+ <!-- malloy-query  
+  name="Resurgent Names`"
+  description="Names, once popular, lose popularity and then, sometime later, re-gain popularity.  This query finds those names.  We find the two most popular decades for a given name and the time difference between them"
+  model="Names"
+-->
+```malloy
+query: names2 -> resurgent_names
+```
+
 
 ## About Malloy Composer
 
@@ -56,4 +146,4 @@ in your browser.  Javascript code is compled from here:
   
  and distributed from here:
  
-   https://github.com/lloydtabb/malloy_fiddle_dist
+  https://github.com/lloydtabb/malloy_fiddle_dist

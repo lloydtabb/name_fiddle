@@ -1,8 +1,10 @@
-[
-  {
-    "name": "Names",
-    "dataTables": ["usa_names.parquet"],
-    "modelPath": "./names_composer.malloy",
-    "readme": "./composer.md"
-  }
-]
+{
+  "datasets": [
+    {
+      "name": "Names",
+      "tables": ["usa_names.parquet"],
+      "model": "./names_composer.malloy",
+      "readme": "./composer.md"
+    }
+  ]
+}
