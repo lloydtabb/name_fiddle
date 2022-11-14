@@ -1,10 +1,11 @@
 {
-  "datasets": [
+  "readme": "./composer.md",
+  "title": "Baby Names",
+  "models": [
     {
-      "name": "Names",
-      "tables": ["usa_names.parquet"],
-      "model": "./names_composer.malloy",
-      "readme": "./composer.md"
+      "id": "names2",
+      "modelPath": "./names_composer.malloy",
+      "tables": ["./usa_names.parquet"]
     }
   ]
 }
