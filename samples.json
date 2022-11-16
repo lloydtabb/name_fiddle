@@ -2,7 +2,7 @@
   {
     "name": "SSA Names Database",
     "dataTables": ["usa_names.parquet"],
-    "modelPath": "./names.malloy",
+    "path": "./names.malloy",
     "queryPath": "./names-queries.malloy"
   }
 ]

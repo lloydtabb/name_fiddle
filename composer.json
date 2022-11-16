@@ -4,7 +4,7 @@
   "models": [
     {
       "id": "names2",
-      "modelPath": "./names_composer.malloy",
+      "path": "./names_composer.malloy",
       "tables": ["./usa_names.parquet"]
     }
   ]
